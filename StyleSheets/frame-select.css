@@ -1,0 +1,221 @@
+/* ============================
+   FRAME SELECT PAGE — Clean Blue
+   ============================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+:root {
+  --bg-main: #B4DFFF;
+  --accent: #4a90d9;
+  --accent-dark: #2c6fad;
+  --accent-light: #d6e8f7;
+  --text-main: #555555;
+  --text-soft: #888888;
+  --white: #ffffff;
+  --border: #d0e4f4;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 1rem 3rem;
+  font-family: 'Nunito', sans-serif;
+  color: var(--text-main);
+}
+
+/* Logo */
+.logo {
+  width: 80px;
+  height: 56px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.logo:hover { transform: scale(1.05); }
+.logo img { width: 100%; height: auto; }
+
+/* Page Title */
+.page-title {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+.page-title h1 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.01em;
+}
+.page-title p {
+  font-size: 0.88rem;
+  color: var(--text-soft);
+  margin-top: 0.3rem;
+}
+
+/* Frame Grid */
+.frame-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 640px;
+}
+
+/* Frame Card */
+.frame-card {
+  position: relative;
+  background: var(--white);
+  border: 1.5px solid #e0e0e0;
+  border-radius: 1rem;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+}
+
+.frame-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(74, 144, 217, 0.15);
+}
+
+.frame-card.selected {
+  border-color: var(--accent-dark);
+  box-shadow: 0 0 0 3px rgba(74, 144, 217, 0.25), 0 6px 20px rgba(74, 144, 217, 0.12);
+}
+
+/* Selected checkmark */
+.frame-card.selected::after {
+  content: '✓';
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  background: var(--accent-dark);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 800;
+  z-index: 10;
+  animation: popIn 0.25s ease;
+}
+
+@keyframes popIn {
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+/* Frame Preview */
+.frame-preview {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  background: var(--accent-light);
+}
+
+/* Frame Info */
+.frame-info {
+  padding: 0.65rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.frame-info .frame-name {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text-main);
+}
+
+.frame-info .frame-meta {
+  font-size: 0.75rem;
+  color: var(--text-soft);
+  font-weight: 600;
+}
+
+/* Slot dots */
+.slot-dots {
+  display: flex;
+  gap: 0.25rem;
+  margin-top: 0.2rem;
+  flex-wrap: wrap;
+}
+.slot-dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: #d0d0d0;
+  transition: background 0.2s;
+}
+.frame-card.selected .slot-dot {
+  background: var(--accent-dark);
+}
+
+/* CTA */
+.cta-container {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.btn-select {
+  padding: 0.8rem 2.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
+  background-color: var(--white);
+  color: var(--text-main);
+  border: 1px solid #1e1e1e;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.btn-select.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.btn-select.active:hover {
+  transform: scale(1.05);
+}
+
+.btn-select.active:active {
+  transform: scale(0.97);
+}
+
+.cta-hint {
+  font-size: 0.8rem;
+  color: var(--text-soft);
+  font-weight: 600;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .frame-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.85rem;
+  }
+  .page-title h1 { font-size: 1.25rem; }
+}

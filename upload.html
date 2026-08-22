@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Foto — Nashallery's Booth</title>
+  <meta name="description" content="Upload foto dari galeri untuk photobooth Nashallery!" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="Assets/fish-photobooth/favicon.png" type="image/x-icon" />
+  <link rel="stylesheet" href="StyleSheets/camera.css?v=3" />
+
+  <style>
+    /* Hide actual file input */
+    #uploadPhotoInput { display: none; }
+
+    .upload-hint {
+      font-size: 0.9rem;
+      color: #6B8EAD;
+      font-weight: 600;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo" id="logoBtn">
+    <img src="Assets/fish-photobooth/logo-new.png" alt="Logo" />
+  </div>
+
+  <!-- Photo Progress -->
+  <div class="photo-progress" id="photoProgress">
+    <!-- Filled by JS -->
+  </div>
+
+  <div class="photobooth-container" id="booth">
+    <div class="bubble-container"></div>
+    <canvas id="finalCanvas"></canvas>
+
+    <!-- Hidden file input -->
+    <input type="file" id="uploadPhotoInput" accept="image/*" />
+
+    <img class="frame-overlay" id="frameOverlay" src="" alt="Frame overlay" />
+  </div>
+
+  <div class="controls">
+    <button id="uploadPhoto">Upload Foto</button>
+    <button id="readyButton" disabled style="display:none;">Selesai</button>
+  </div>
+
+  <p class="upload-hint" id="uploadHint">Upload foto satu per satu sesuai jumlah slot frame</p>
+
+  <!-- Load frame config first, then upload logic -->
+  <script src="Javascripts/frameConfig.js"></script>
+  <script src="Javascripts/upload.js"></script>
+  <script src="Javascripts/bubbles.js"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kamera — Nashallery's Booth</title>
+  <meta name="description" content="Ambil foto untuk photobooth Nashallery!" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="Assets/fish-photobooth/favicon.png" type="image/x-icon" />
+  <link rel="stylesheet" href="StyleSheets/camera.css?v=4" />
+</head>
+<body>
+  <div class="logo" id="logoBtn">
+    <img src="Assets/fish-photobooth/logo-new.png" alt="Logo" />
+  </div>
+
+  <!-- Photo Progress -->
+  <div class="photo-progress" id="photoProgress">
+    <!-- Filled by JS -->
+  </div>
+
+  <div class="photobooth-container" id="booth">
+    <div class="bubble-container"></div>
+    <div class="countdown-timer" style="display:none;">3</div>
+    <canvas id="finalCanvas"></canvas>
+    <video id="liveVideo" autoplay playsinline muted></video>
+    <img class="frame-overlay" id="frameOverlay" src="" alt="Frame overlay" />
+  </div>
+
+  <div class="controls">
+    <button id="takePhoto">Capture</button>
+    <button id="readyButton" disabled style="display: none;">Selesai</button>
+  </div>
+
+  <!-- Load frame config first, then camera logic -->
+  <script src="Javascripts/frameConfig.js?v=4"></script>
+  <script src="Javascripts/camera.js?v=4"></script>
+  <script src="Javascripts/bubbles.js?v=4"></script>
+</body>
+</html>

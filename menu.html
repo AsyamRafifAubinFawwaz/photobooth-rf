@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Menu — Nashallery's Booth</title>
+  <meta name="description" content="Pilih mode foto: ambil foto langsung dengan kamera atau upload dari galeri." />
+
+  <!-- Favicon -->
+  <link rel="icon" href="Assets/fish-photobooth/favicon.png" type="image/x-icon" />
+  <link rel="stylesheet" href="StyleSheets/home.css?v=3" />
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+    .menu-page-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 2.5rem;
+      gap: 1.25rem;
+      width: 100%;
+      max-width: 480px;
+      padding: 0 1rem;
+    }
+
+    .menu-title {
+      text-align: center;
+    }
+    .menu-title h1 {
+      font-family: Castoro, serif;
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: #555555;
+    }
+    .menu-title p {
+      font-family: Castoro, serif;
+      font-size: 0.85rem;
+      color: #888888;
+      margin-top: 0.3rem;
+    }
+
+    .menu-btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      width: 100%;
+    }
+
+    #menu-camera-button,
+    #menu-upload-button {
+      width: 100%;
+      height: 5rem;
+      border-radius: 0.5rem;
+      font-size: 1.3rem;
+      font-weight: 400;
+      font-family: Castoro, serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      background: #ffffff;
+      color: #555555;
+      border: 1px solid #1e1e1e;
+    }
+    #menu-camera-button:hover,
+    #menu-upload-button:hover {
+      transform: scale(1.03);
+    }
+
+    .frame-badge {
+      display: inline-flex;
+      align-items: center;
+      background: #f0f0f0;
+      color: #555555;
+      font-size: 0.82rem;
+      font-family: Castoro, serif;
+      padding: 0.3rem 1rem;
+      border-radius: 0.4rem;
+      border: 1px solid #d0d0d0;
+    }
+
+    .back-link {
+      font-size: 0.82rem;
+      color: #888888;
+      cursor: pointer;
+      text-decoration: none;
+      font-family: Castoro, serif;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: #333333; }
+  </style>
+</head>
+<body>
+  <div class="logo" id="logoBtn">
+    <img src="Assets/fish-photobooth/logo-new.png" alt="Nashallery's Booth Logo" />
+  </div>
+
+  <div class="menu-page-wrapper">
+    <div class="menu-title">
+      <h1>Mau foto gimana?</h1>
+      <p>Pilih cara untuk mengisi frame pilihanmu</p>
+    </div>
+
+    <span class="frame-badge" id="frameBadge">Memuat...</span>
+
+    <div class="menu-btn-group">
+      <button id="menu-camera-button">Take Photos</button>
+      <button id="menu-upload-button">Upload Photos</button>
+    </div>
+
+    <a class="back-link" id="backLink">← Ganti Frame</a>
+  </div>
+
+  <script src="Javascripts/home.js"></script>
+  <script>
+    const FRAME_NAMES = {
+      frame1: 'Frame 1 — 2 foto',
+      frame2: 'Frame 2 — 2 foto',
+      frame3: 'Frame 3 — 3 foto',
+      frame4: 'Frame 4 — 6 foto',
+    };
+    const sel = localStorage.getItem('selectedFrame') || 'frame1';
+    document.getElementById('frameBadge').textContent = FRAME_NAMES[sel] || sel;
+
+    document.getElementById('backLink').addEventListener('click', () => {
+      window.location.href = 'frame-select.html';
+    });
+    document.getElementById('logoBtn').addEventListener('click', () => {
+      window.location.href = 'index.html';
+    });
+  </script>
+</body>
+</html>

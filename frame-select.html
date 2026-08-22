@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pilih Frame — Nashallery's Booth</title>
+  <meta name="description" content="Pilih frame foto favoritmu untuk photobooth Nashallery!" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="Assets/fish-photobooth/favicon.png" type="image/x-icon" />
+  <link rel="stylesheet" href="StyleSheets/frame-select.css?v=3" />
+</head>
+<body>
+  <!-- Logo -->
+  <div class="logo">
+    <img src="Assets/fish-photobooth/favicon.png" alt="Nashallery's Booth Logo" />
+  </div>
+
+  <!-- Page Title -->
+  <div class="page-title">
+    <h1>Pilih Frame</h1>
+    <p>Klik frame yang ingin kamu gunakan, lalu tekan tombol di bawah</p>
+  </div>
+
+  <!-- Frame Grid (rendered by JS) -->
+  <div class="frame-grid" id="frameGrid"></div>
+
+  <!-- CTA -->
+  <div class="cta-container">
+    <button class="btn-select" id="btnSelect">Pilih Frame</button>
+    <span class="cta-hint" id="ctaHint">Belum ada frame yang dipilih</span>
+  </div>
+
+  <script src="Javascripts/frame-select.js"></script>
+</body>
+</html>
