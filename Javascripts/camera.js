@@ -1,26 +1,26 @@
-// ─────────────────────────────────────────────
-//  camera.js — Dynamic multi-frame photo capture
-// ─────────────────────────────────────────────
-
-// Get frame config from localStorage
 const frameConfig = getSelectedFrameConfig();
-const { canvasW: WIDTH, canvasH: HEIGHT, slots: TOTAL_SLOTS, cols: COLS, rows: ROWS } = frameConfig;
-const SLOT_W = WIDTH / COLS;
-const SLOT_H = HEIGHT / ROWS;
+const { 
+  canvasW: WIDTH, 
+  canvasH: HEIGHT, 
+  slots: TOTAL_SLOTS, 
+  cols: COLS, 
+  rows: ROWS, 
+  offsetX = 35, 
+  offsetY = 180, 
+  padding = 20 
+} = frameConfig;
 
-// DOM elements
+const SLOT_W = frameConfig.slotW || ((WIDTH - (offsetX * 2) - (padding * (COLS - 1))) / COLS);
+const SLOT_H = frameConfig.slotH || ((HEIGHT - offsetY - 120 - (padding * (ROWS - 1))) / ROWS);
+
 const canvas = document.getElementById('finalCanvas');
 const ctx = canvas.getContext('2d');
-
-// Set canvas dimensions based on selected frame
 canvas.width = WIDTH;
 canvas.height = HEIGHT;
 
-// Adjust container aspect ratio to match canvas
 const boothEl = document.getElementById('booth');
 boothEl.style.aspectRatio = `${WIDTH} / ${HEIGHT}`;
 
-// Set frame overlay
 const frameOverlay = document.getElementById('frameOverlay');
 frameOverlay.src = frameConfig.src;
 
@@ -32,10 +32,8 @@ const elements = {
   countdownEl: document.querySelector('.countdown-timer'),
 };
 
-// State
-let photoStage = 0; // current slot index (0 to TOTAL_SLOTS-1)
+let photoStage = 0;
 
-// ─── Progress Indicator ───────────────────────
 function buildProgressUI() {
   const container = document.getElementById('photoProgress');
   container.innerHTML = `<span>Foto</span>`;
@@ -58,31 +56,35 @@ function updateProgressUI() {
   }
 }
 
-// ─── Video positioning ────────────────────────
-// Video moves to the current slot so user knows where to pose
+function getSlotDimensions(index) {
+  const slotConfig = frameConfig.windows[index];
+  return {
+    leftPx: slotConfig.px * WIDTH,
+    topPx: slotConfig.py * HEIGHT,
+    slotW: slotConfig.pw * WIDTH,
+    slotH: slotConfig.ph * HEIGHT
+  };
+}
+
 function moveVideoToSlot(slotIndex) {
   const { video } = elements;
   video.style.display = 'block';
   video.style.position = 'absolute';
 
-  const col = slotIndex % COLS;
-  const row = Math.floor(slotIndex / COLS);
+  const slotConfig = frameConfig.windows[slotIndex];
 
-  video.style.left   = `${(col / COLS) * 100}%`;
-  video.style.top    = `${(row / ROWS) * 100}%`;
-  video.style.width  = `${(1 / COLS) * 100}%`;
-  video.style.height = `${(1 / ROWS) * 100}%`;
+  video.style.left   = `${slotConfig.px * 100}%`;
+  video.style.top    = `${slotConfig.py * 100}%`;
+  video.style.width  = `${slotConfig.pw * 100}%`;
+  video.style.height = `${slotConfig.ph * 100}%`;
 }
 
-// ─── Countdown ───────────────────────────────
 function startCountdown(callback) {
   let count = 3;
   const { countdownEl } = elements;
 
-  // Position countdown near the top of the current slot
-  const row = Math.floor(photoStage / COLS);
-  const topPct = (row / ROWS) * 100;
-  countdownEl.style.top = `calc(${topPct}% + 0.5rem)`;
+  const slotConfig = frameConfig.windows[photoStage];
+  countdownEl.style.top = `calc(${slotConfig.py * 100}% + 0.5rem)`;
 
   countdownEl.textContent = count;
   countdownEl.style.display = 'flex';
@@ -97,18 +99,16 @@ function startCountdown(callback) {
   }, 1000);
 }
 
-// ─── Flash feedback on capture ────────────────
 function flashFeedback() {
-  // Flash only on the current slot
-  const col = (photoStage - 1) % COLS;
-  const row = Math.floor((photoStage - 1) / COLS);
+  const slotConfig = frameConfig.windows[photoStage - 1];
+
   const flash = document.createElement('div');
   flash.style.cssText = `
     position:absolute;
-    left:${(col / COLS) * 100}%;
-    top:${(row / ROWS) * 100}%;
-    width:${(1 / COLS) * 100}%;
-    height:${(1 / ROWS) * 100}%;
+    left:${slotConfig.px * 100}%;
+    top:${slotConfig.py * 100}%;
+    width:${slotConfig.pw * 100}%;
+    height:${slotConfig.ph * 100}%;
     background:rgba(255,255,255,0.75);
     z-index:200;pointer-events:none;
     animation:flashOut 0.3s ease forwards;
@@ -117,17 +117,13 @@ function flashFeedback() {
   setTimeout(() => flash.remove(), 350);
 }
 
-// ─── Capture ─────────────────────────────────
 function capturePhoto() {
   const { video, ctx } = elements;
 
-  const col = photoStage % COLS;
-  const row = Math.floor(photoStage / COLS);
-  const xOffset = col * SLOT_W;
-  const yOffset = row * SLOT_H;
+  const { leftPx, topPx, slotW, slotH } = getSlotDimensions(photoStage);
 
   const vW = video.videoWidth, vH = video.videoHeight;
-  const targetAspect = SLOT_W / SLOT_H;
+  const targetAspect = slotW / slotH;
   const vAspect = vW / vH;
 
   let sx, sy, sw, sh;
@@ -137,11 +133,10 @@ function capturePhoto() {
     sw = vW; sh = vW / targetAspect; sx = 0; sy = (vH - sh) / 2;
   }
 
-  // Mirror horizontally (selfie)
   ctx.save();
-  ctx.translate(xOffset + SLOT_W, yOffset);
+  ctx.translate(leftPx + slotW, topPx);
   ctx.scale(-1, 1);
-  ctx.drawImage(video, sx, sy, sw, sh, 0, 0, SLOT_W, SLOT_H);
+  ctx.drawImage(video, sx, sy, sw, sh, 0, 0, slotW, slotH);
   ctx.restore();
 
   photoStage++;
@@ -149,7 +144,6 @@ function capturePhoto() {
   flashFeedback();
 
   if (photoStage < TOTAL_SLOTS) {
-    // Move video preview to next slot
     moveVideoToSlot(photoStage);
     elements.takePhotoBtn.disabled = false;
   } else {
@@ -157,7 +151,6 @@ function capturePhoto() {
   }
 }
 
-// ─── Finalize ────────────────────────────────
 function finalizePhotoStrip() {
   const { video } = elements;
   video.style.display = 'none';
@@ -173,19 +166,17 @@ function finalizePhotoStrip() {
   if (frame.complete && frame.naturalWidth > 0) frame.onload();
 }
 
-// ─── Camera Setup ────────────────────────────
 function setupCamera() {
   navigator.mediaDevices.getUserMedia({
-    video: { width: { ideal: 2560 }, height: { ideal: 1440 }, facingMode: 'user' },
+    video: { width: { ideal: 1920 }, height: { ideal: 1080 }, facingMode: 'user' },
     audio: false,
   }).then(stream => {
     elements.video.srcObject = stream;
     elements.video.play();
-    moveVideoToSlot(0); // start at slot 0
+    moveVideoToSlot(0);
   }).catch(err => alert('Akses kamera gagal: ' + err));
 }
 
-// ─── Events ──────────────────────────────────
 function setupEventListeners() {
   elements.takePhotoBtn.addEventListener('click', () => {
     if (photoStage >= TOTAL_SLOTS) return;
@@ -198,7 +189,6 @@ function setupEventListeners() {
   });
 }
 
-// ─── Init ────────────────────────────────────
 buildProgressUI();
 setupCamera();
 setupEventListeners();

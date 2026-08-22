@@ -7,9 +7,7 @@ localStorage.removeItem('photoStrip');
 
 // Get frame config
 const frameConfig = getSelectedFrameConfig();
-const { canvasW: WIDTH, canvasH: HEIGHT, slots: TOTAL_SLOTS, cols: COLS, rows: ROWS } = frameConfig;
-const SLOT_W = WIDTH / COLS;
-const SLOT_H = HEIGHT / ROWS;
+const { canvasW: WIDTH, canvasH: HEIGHT, slots: TOTAL_SLOTS } = frameConfig;
 
 // DOM elements
 const canvas   = document.getElementById('finalCanvas');
@@ -66,15 +64,22 @@ function updateHint() {
   }
 }
 
+function getSlotDimensions(index) {
+  const slotConfig = frameConfig.windows[index];
+  return {
+    leftPx: slotConfig.px * WIDTH,
+    topPx: slotConfig.py * HEIGHT,
+    slotW: slotConfig.pw * WIDTH,
+    slotH: slotConfig.ph * HEIGHT
+  };
+}
+
 // ─── Draw uploaded photo to slot ─────────────
 function drawPhoto(img) {
-  const col = photoStage % COLS;
-  const row = Math.floor(photoStage / COLS);
-  const xOffset = col * SLOT_W;
-  const yOffset = row * SLOT_H;
+  const { leftPx, topPx, slotW, slotH } = getSlotDimensions(photoStage);
 
   const imgAspect    = img.width / img.height;
-  const targetAspect = SLOT_W / SLOT_H;
+  const targetAspect = slotW / slotH;
 
   let sx, sy, sw, sh;
   if (imgAspect > targetAspect) {
@@ -83,7 +88,7 @@ function drawPhoto(img) {
     sw = img.width; sh = img.width / targetAspect; sx = 0; sy = (img.height - sh) / 2;
   }
 
-  ctx.drawImage(img, sx, sy, sw, sh, xOffset, yOffset, SLOT_W, SLOT_H);
+  ctx.drawImage(img, sx, sy, sw, sh, leftPx, topPx, slotW, slotH);
 
   photoStage++;
   updateProgressUI();

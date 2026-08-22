@@ -62,7 +62,7 @@ body {
   position: relative;
   width: 60vmin;
   max-width: 588px;
-  aspect-ratio: 588 / 735;
+  /* aspect-ratio is set dynamically by JS per frame */
   background: #D5E8EB;
   overflow: hidden;
 }
@@ -71,7 +71,6 @@ body {
   .photobooth-container {
     width: 90vw;
     max-width: none;
-    aspect-ratio: 588 / 735;
   }
 }
 

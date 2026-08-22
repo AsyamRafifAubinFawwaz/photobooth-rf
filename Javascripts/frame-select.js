@@ -78,7 +78,7 @@ function selectFrame(key, cardEl) {
 btnSelect.addEventListener('click', () => {
   if (!selectedFrameKey) return;
   localStorage.setItem('selectedFrame', selectedFrameKey);
-  window.location.href = 'menu.html';
+  window.location.href = 'menu.html?t=' + Date.now();
 });
 
 // Logo redirect

@@ -164,7 +164,8 @@ function addSafeNavigation(button, url, id) {
     }
 
     e.preventDefault();
-    setTimeout(() => (window.location.href = url), 100);
+    const noCacheUrl = url.includes('?') ? url + '&t=' + Date.now() : url + '?t=' + Date.now();
+    setTimeout(() => (window.location.href = noCacheUrl), 100);
   });
 }
 
