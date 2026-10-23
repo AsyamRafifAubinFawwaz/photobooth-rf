@@ -3,35 +3,37 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Motrack Booth — Photobooth Online</title>
-  <meta name="description" content="Photobooth online seru dengan berbagai frame lucu! Foto, hias dengan stiker, dan download hasilnya." />
+  <title>Motrack — Your Photo Moment</title>
+  <meta name="description" content="Abadikan momen dengan Motrack. Pilih frame, ambil atau upload foto, lalu hias dan download hasilnya." />
 
-  <!-- Favicon -->
-  <link rel="icon" href="Assets/fish-photobooth/favicon.png" type="image/x-icon" />
-  <link rel="stylesheet" href="StyleSheets/home.css?v=3" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='14' fill='%23176b63'/%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-weight='bold' font-size='25' fill='white'%3EM%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="StyleSheets/motrack-home.css?v=1" />
 </head>
 <body>
-  <!-- <div class="logo">
-    <img src="Assets/fish-photobooth/logo-new.png" alt="Nashallery's Booth Logo">
-  </div> -->
+  <a class="logo" href="index.html" aria-label="Motrack beranda">
+    <span class="logo-mark" aria-hidden="true">M</span>
+    <span class="logo-name">motrack</span>
+  </a>
 
-  <!-- Main Container -->
   <div class="home-container">
-    <div class="photobooth-container">
-      <div class="photobooth-mock"></div>
-      <div class="photostrip-mock"></div>
-      <div class="bubbles-mock"></div>
-      <div class="fish-mock-1"></div>
-      <div class="fish-mock-2"></div>
-      <div class="fish-mock-3"></div>
-    </div>
+    <section class="hero-copy">
+      <span class="eyebrow">Momenmu, gayamu</span>
+      <h1>Make it a <span>moment.</span></h1>
+      <p>Pilih frame favorit, abadikan momen, dan bawa pulang hasil foto yang paling kamu suka.</p>
+      <div class="button-container">
+        <button id="select-button">Mulai photobooth</button>
+      </div>
+      <p class="hero-note">Ambil foto langsung atau upload dari galeri.</p>
+    </section>
 
-    <div class="button-container">
-      <button id="select-button">Select</button>
+    <div class="photobooth-container" aria-label="Preview frame Motrack">
+      <div class="frame-preview-card">
+        <img src="Assets/fish-photobooth/camerapage/frame2.png" alt="Preview frame foto Motrack dengan dua slot foto" />
+      </div>
+      <span class="frame-preview-caption">Frame pilihanmu</span>
     </div>
   </div>
 
-  <!-- Main JS -->
-  <script src="Javascripts/home.js?v=4"></script>
+  <script src="Javascripts/home.js?v=5"></script>
 </body>
 </html>

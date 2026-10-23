@@ -113,7 +113,32 @@ function finalizePhotoStrip() {
 
 // ─── Events ──────────────────────────────────
 readyBtn.addEventListener('click', () => {
-  localStorage.setItem('photoStrip', canvas.toDataURL('image/png'));
+  try {
+    // Try saving as PNG first (preserves transparency)
+    localStorage.setItem('photoStrip', canvas.toDataURL('image/png'));
+  } catch (e) {
+    console.warn("Local storage quota exceeded for PNG, falling back to JPEG...");
+    try {
+      // Fallback to high-quality JPEG
+      localStorage.setItem('photoStrip', canvas.toDataURL('image/jpeg', 0.8));
+    } catch (e2) {
+      console.warn("Local storage quota exceeded for JPEG, scaling down...");
+      // Fallback to scaled-down JPEG
+      const temp = document.createElement('canvas');
+      temp.width = canvas.width / 2;
+      temp.height = canvas.height / 2;
+      const tCtx = temp.getContext('2d');
+      tCtx.fillStyle = 'white';
+      tCtx.fillRect(0, 0, temp.width, temp.height);
+      tCtx.drawImage(canvas, 0, 0, temp.width, temp.height);
+      
+      try {
+        localStorage.setItem('photoStrip', temp.toDataURL('image/jpeg', 0.8));
+      } catch (e3) {
+        localStorage.setItem('photoStrip', temp.toDataURL('image/jpeg', 0.5));
+      }
+    }
+  }
   window.location.href = 'final.html';
 });
 

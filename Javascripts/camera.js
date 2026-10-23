@@ -157,13 +157,36 @@ function finalizePhotoStrip() {
   elements.takePhotoBtn.style.display = 'none';
 
   const frame = new Image();
-  frame.src = frameConfig.src;
   frame.onload = () => {
     ctx.drawImage(frame, 0, 0, WIDTH, HEIGHT);
-    localStorage.setItem('photoStrip', canvas.toDataURL('image/png'));
+    
+    try {
+      localStorage.setItem('photoStrip', canvas.toDataURL('image/png'));
+    } catch (e) {
+      console.warn("Local storage quota exceeded for PNG, falling back to JPEG...");
+      try {
+        localStorage.setItem('photoStrip', canvas.toDataURL('image/jpeg', 0.8));
+      } catch (e2) {
+        console.warn("Local storage quota exceeded for JPEG, scaling down...");
+        const temp = document.createElement('canvas');
+        temp.width = canvas.width / 2;
+        temp.height = canvas.height / 2;
+        const tCtx = temp.getContext('2d');
+        tCtx.fillStyle = 'white';
+        tCtx.fillRect(0, 0, temp.width, temp.height);
+        tCtx.drawImage(canvas, 0, 0, temp.width, temp.height);
+        
+        try {
+          localStorage.setItem('photoStrip', temp.toDataURL('image/jpeg', 0.8));
+        } catch (e3) {
+          localStorage.setItem('photoStrip', temp.toDataURL('image/jpeg', 0.5));
+        }
+      }
+    }
+
     setTimeout(() => window.location.href = 'final.html', 50);
   };
-  if (frame.complete && frame.naturalWidth > 0) frame.onload();
+  frame.src = frameConfig.src;
 }
 
 function setupCamera() {
